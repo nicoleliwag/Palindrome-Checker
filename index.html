@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palindrome Checker</title>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css">
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('https://i.pinimg.com/enabled_lo/1200x/9d/4a/8f/9d4a8f9b3cbdb3205ce09beb69d83844.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 50, 0.6); /* Dark Blue overlay for readability */
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(0, 0, 50, 0.8); /* Dark blue semi-transparent background */
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 191, 255, 0.8); /* Glowing blue effect */
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px; /* Reduced margin for better spacing */
+            color: #00bfff; /* Deep Sky Blue */
+            text-shadow: 0 0 10px #00bfff; /* Glowing text effect */
+        }
+
+        .definition {
+            font-size: 1em;
+            margin-bottom: 20px;
+            color: #fff; /* White text for readability */
+            text-shadow: 0 0 5px #00bfff; /* Glow effect */
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            border: 2px solid #1e90ff; /* Dodger Blue Border */
+            margin-bottom: 20px;
+            outline: none;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            text-shadow: 0 0 5px #00bfff; /* Input text glow */
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #1e90ff; /* Dodger Blue */
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 15px #1e90ff; /* Button glow */
+        }
+
+        button:hover {
+            background-color: #00bfff; /* Deep Sky Blue */
+            box-shadow: 0 0 20px #00bfff; /* Stronger glow on hover */
+        }
+
+        p#result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            min-height: 30px; /* Space reserved for results */
+            text-shadow: 0 0 10px #00bfff; /* Glowing text */
+        }
+
+        /* Different colors for palindrome and non-palindrome */
+        p#result.palindrome {
+            color: #00ffff; /* Aqua for palindromes */
+        }
+
+        p#result.non-palindrome {
+            color: #ff4500; /* OrangeRed for non-palindromes */
+        }
+
+        /* Symmetry-inspired animation for result text */
+        p#result span {
+            display: inline-block;
+            transform: scaleX(1);
+            transition: transform 0.4s ease-in-out;
+        }
+
+        p#result span.flip {
+            transform: scaleX(-1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            input, button {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <h1>Palindrome Checker</h1>
+        <p class="definition">A palindrome is a word, phrase, number, or other sequence of characters that reads the same forward and backward (ignoring spaces, punctuation, and capitalization). For example: <strong>“A man, a plan, a canal, Panama!”</strong></p>
+        <input id="user-input" type="text" placeholder="Enter a word or phrase" />
+        <button id="check-button" py-click="check_palindrome()">Check</button>
+        <p id="result"></p>
+    </div>
+
+    <py-script>
+        def is_palindrome(s):
+            # Remove non-alphanumeric characters and convert to lowercase
+            cleaned = ''.join(char.lower() for char in s if char.isalnum())
+            # Check if the cleaned string is the same forwards and backwards
+            return cleaned == cleaned[::-1]
+
+        def check_palindrome():
+            # Get the user input from the input field
+            user_input = Element("user-input").element.value
+
+            # Check if it's a palindrome
+            result = is_palindrome(user_input)
+            result_text = f'"{user_input}" is a palindrome.' if result else f'"{user_input}" is not a palindrome.'
+
+            # Update the result on the webpage
+            result_element = Element("result").element
+
+            # Apply class based on whether it is a palindrome
+            if result:
+                result_element.innerHTML = '<span>' + result_text + '</span>'
+                result_element.className = 'palindrome'
+                result_element.querySelector('span').classList.add('flip')
+            else:
+                result_element.innerHTML = '<span>' + result_text + '</span>'
+                result_element.className = 'non-palindrome'
+                result_element.querySelector('span').classList.remove('flip')
+    </py-script>
+</body>
+</html>
